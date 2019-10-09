@@ -57,7 +57,7 @@ selinux --enforcing
 skipx
 
 # Power down the machine after install
-poweroff
+#poweroff
 
 # Disable kdump
 %addon com_redhat_kdump --disable
@@ -217,13 +217,13 @@ sysctl -p
 # Install Mellanox OFED
 mkdir -p /tmp/mlnxofed
 cd /tmp/mlnxofed
-wget https://www.mellanox.com/downloads/ofed/MLNX_OFED-4.7-1.0.0.1/MLNX_OFED_LINUX-4.7-1.0.0.1-rhel7.6-x86_64.tgz
-tar zxvf MLNX_OFED_LINUX-4.7-1.0.0.1-rhel7.6-x86_64.tgz
+wget https://www.mellanox.com/downloads/ofed/MLNX_OFED-4.7-1.0.0.1/MLNX_OFED_LINUX-4.7-1.0.0.1-rhel7.7-x86_64.tgz
+tar zxvf MLNX_OFED_LINUX-4.7-1.0.0.1-rhel7.7-x86_64.tgz
 
 KERNEL=( $(rpm -q kernel | sed 's/kernel\-//g') )
 KERNEL=${KERNEL[-1]}
 yum install -y kernel-devel-${KERNEL}
-./MLNX_OFED_LINUX-4.7-1.0.0.1-rhel7.6-x86_64/mlnxofedinstall --kernel $KERNEL --kernel-sources /usr/src/kernels/${KERNEL} --add-kernel-support --skip-repo
+./MLNX_OFED_LINUX-4.7-1.0.0.1-rhel7.7-x86_64/mlnxofedinstall --kernel $KERNEL --kernel-sources /usr/src/kernels/${KERNEL} --add-kernel-support --skip-repo
 cd && rm -rf /tmp/mlnxofed
 
 # Configure WALinuxAgent
