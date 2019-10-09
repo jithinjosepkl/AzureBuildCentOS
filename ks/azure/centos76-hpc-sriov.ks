@@ -323,9 +323,19 @@ cd mpich-${MPICH_VERSION}
 cd ..
 
 # Intel MPI 2019 (update 5)
-IMPI_VERSION="2019.5.281"
+IMPI_2019_VERSION="2019.5.281"
 CFG="IntelMPI-v2019.x-silent.cfg"
-wget http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15838/l_mpi_${IMPI_VERSION}.tgz
+wget http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15838/l_mpi_${IMPI_2019_VERSION}.tgz
+wget https://raw.githubusercontent.com/szarkos/AzureBuildCentOS/master/config/azure/${CFG}
+tar -xvf l_mpi_${IMPI_2019_VERSION}.tgz
+cd l_mpi_${IMPI_2019_VERSION}
+./install.sh --silent /tmp/mpi/${CFG}
+cd ..
+
+# Intel MPI 2018 (update 4)
+IMPI_VERSION="2018.4.274"
+CFG="IntelMPI-v2018.x-silent.cfg"
+wget http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13651/l_mpi_${IMPI_VERSION}.tgz
 wget https://raw.githubusercontent.com/szarkos/AzureBuildCentOS/master/config/azure/${CFG}
 tar -xvf l_mpi_${IMPI_VERSION}.tgz
 cd l_mpi_${IMPI_VERSION}
@@ -398,7 +408,7 @@ setenv          MPI_MAN         /opt/openmpi-${OMPI_VERSION}/share/man
 setenv          MPI_HOME        /opt/openmpi-${OMPI_VERSION}
 EOF
 
-#IntelMPI
+#IntelMPI-v2018
 cat << EOF >> /usr/share/Modules/modulefiles/mpi/impi_${IMPI_VERSION}
 #%Module 1.0
 #
@@ -415,11 +425,29 @@ setenv          MPI_MAN         /opt/intel/impi/${IMPI_VERSION}/man
 setenv          MPI_HOME        /opt/intel/impi/${IMPI_VERSION}/intel64
 EOF
 
+#IntelMPI-v2019
+cat << EOF >> /usr/share/Modules/modulefiles/mpi/impi_${IMPI_2019_VERSION}
+#%Module 1.0
+#
+#  Intel MPI ${IMPI_2019_VERSION}
+#
+conflict        mpi
+prepend-path    PATH            /opt/intel/impi/${IMPI_2019_VERSION}/intel64/bin
+prepend-path    LD_LIBRARY_PATH /opt/intel/impi/${IMPI_2019_VERSION}/intel64/lib
+prepend-path    MANPATH         /opt/intel/impi/${IMPI_2019_VERSION}/man
+setenv          MPI_BIN         /opt/intel/impi/${IMPI_2019_VERSION}/intel64/bin
+setenv          MPI_INCLUDE     /opt/intel/impi/${IMPI_2019_VERSION}/intel64/include
+setenv          MPI_LIB         /opt/intel/impi/${IMPI_2019_VERSION}/intel64/lib
+setenv          MPI_MAN         /opt/intel/impi/${IMPI_2019_VERSION}/man
+setenv          MPI_HOME        /opt/intel/impi/${IMPI_2019_VERSION}/intel64
+EOF
+
 # Create symlinks for modulefiles
 ls -s /usr/share/Modules/modulefiles/mpi/hpcx-${HPCX_VERSION} /usr/share/Modules/modulefiles/mpi/hpcx
 ls -s /usr/share/Modules/modulefiles/mpi/mpich-${MPICH_VERSION} /usr/share/Modules/modulefiles/mpi/mpich
 ls -s /usr/share/Modules/modulefiles/mpi/mvapich2-${MV2_VERSION} /usr/share/Modules/modulefiles/mpi/mvapich2
 ls -s /usr/share/Modules/modulefiles/mpi/openmpi-${OMPI_VERSION} /usr/share/Modules/modulefiles/mpi/openmpi
+ls -s /usr/share/Modules/modulefiles/mpi/impi_${IMPI_2019_VERSION} /usr/share/Modules/modulefiles/mpi/impi-2019
 ls -s /usr/share/Modules/modulefiles/mpi/impi_${IMPI_VERSION} /usr/share/Modules/modulefiles/mpi/impi
 
 # Modify yum
