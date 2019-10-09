@@ -57,7 +57,7 @@ selinux --enforcing
 skipx
 
 # Power down the machine after install
-poweroff
+#poweroff
 
 # Disable kdump
 %addon com_redhat_kdump --disable
